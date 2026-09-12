@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "amane-local-file"
+version = "0.1.0"
+description = "Amane playback plugin streaming indexed local files"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.14"
+# 运行时由主机提供 amane.plugin, 插件不得自带第三方依赖.
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "amane",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.12.5",
+    "ty>=0.0.35",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+# 本目录与宿主源码树同级于 projects/, 因此宿主是上一级的兄弟目录.
+amane = { path = "../../amane", editable = true }
+
+[tool.ruff]
+target-version = "py314"
+line-length = 120
+src = [".", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "RUF"]
+
+[tool.ty]
+src = { include = [".", "tests"], exclude = [".venv"] }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "strict"
